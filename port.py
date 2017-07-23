@@ -2,7 +2,8 @@
 #- * -coding: utf - 8 - * -
 import requests
 
-print '''\033[1;34m                    _   _                  
+BANNER   =  '''
+\033[1;34m          _   _                  
   Somdev Sangwan   | \ | |   TeamUltimate.in             
    __ _ _ __   ___ |  \| |_ __ ___   __ _ _ __  
   / _` | '_ \ / _ \| . ` | '_ ` _ \ / _` | '_ \ 
@@ -15,17 +16,17 @@ print '''\033[1;34m                    _   _
 def scan():
     ports = ['21','22','23','25','53','80','110','135','139','143','161', '443','445','3306','8080','8443','5432']
 
+    headers =  {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0',
+        'Host': 'developers.facebook.com',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Encoding': '',
+        'Cookie': cookie
+    }
+    url = 'https://developers.facebook.com/tools/debug/echo/?q=' + target + ':' + port + '/'
+    
     for port in ports:
-        headers =  {
-           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:47.0) Gecko/20100101 Firefox/47.0',
-           'Host': 'developers.facebook.com',
-           'Accept-Language': 'en-US,en;q=0.5',
-           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-           'Accept-Encoding': '',
-           'Cookie': cookie
-                    }
-
-        url = 'https://developers.facebook.com/tools/debug/echo/?q=' + target + ':' + port + '/'
         try:
             response = requests.get(url, headers = headers, timeout = 5)
             if 'connect timed out after' in response.text:
@@ -36,18 +37,20 @@ def scan():
                 print '\033[1;31m [+] Port %s is closed\033[1;m\033[1;m'%port
         except(requests.exceptions.ConnectionError):
             print '\033[1;31m [+] Port %s is closed\033[1;m'%port
-try:
+
+def main():
+    print BANNER
     target = raw_input("\n\033[97m [?] Enter the target: \033[1;m")
     cookie = raw_input("\n\033[97m [?] Enter facebook cookie: \033[1;m")
-    if "http://" in target:
-        pass
-    if "https://" in target:
-        pass
-    else:
-        target = "http://" + target
-    print""
+    if not(target.startswith('http://') or target.startswith('https://')):
+       target = "http://" + target
+    print ""
     scan()
 
-except:
-    print "There's some problem with the target."
-    quit()
+
+if __name__ == '__main__':
+    try:
+      main()
+    except:
+      print "There's some problem with the target."
+      quit()
