@@ -2,8 +2,7 @@
 #- * -coding: utf - 8 - * -
 import requests
 
-BANNER   =  '''
-\033[1;34m          _   _                  
+print """\033[1;34m          _   _                  
   Somdev Sangwan   | \ | |   TeamUltimate.in             
    __ _ _ __   ___ |  \| |_ __ ___   __ _ _ __  
   / _` | '_ \ / _ \| . ` | '_ ` _ \ / _` | '_ \ 
@@ -11,9 +10,9 @@ BANNER   =  '''
   \__,_|_| |_|\___/|_| \_|_| |_| |_|\__,_| .__/ 
                                          | |    
   Perform anonymous port scans           |_|
-  using Facebook's XSPA vulnerability   \033[1;m'''
+  using Facebook's XSPA vulnerability   \033[1;m"""
 
-def scan():
+def scanner():
     ports = ['21','22','23','25','53','80','110','135','139','143','161', '443','445','3306','8080','8443','5432']
 
     headers =  {
@@ -35,22 +34,13 @@ def scan():
                 print '\033[1;32m [+] Port %s is open\033[1;m'%port
             else:
                 print '\033[1;31m [+] Port %s is closed\033[1;m\033[1;m'%port
-        except(requests.exceptions.ConnectionError):
+        except:
             print '\033[1;31m [+] Port %s is closed\033[1;m'%port
 
-def main():
-    print BANNER
+def menu():
     target = raw_input("\n\033[97m [?] Enter the target: \033[1;m")
     cookie = raw_input("\n\033[97m [?] Enter facebook cookie: \033[1;m")
-    if not(target.startswith('http://') or target.startswith('https://')):
+    if 'http://' not in target or 'https://' not in target:
        target = "http://" + target
-    print ""
-    scan()
-
-
-if __name__ == '__main__':
-    try:
-      main()
-    except:
-      print "There's some problem with the target."
-      quit()
+    scanner()
+menu()
