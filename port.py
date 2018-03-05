@@ -12,7 +12,7 @@ print """\033[1;34m          _   _
   Perform anonymous port scans           |_|
   using Facebook's XSPA vulnerability   \033[1;m"""
 
-def scanner():
+def scanner(target, cookie):
     ports = ['21','22','23','25','53','80','110','135','139','143','161', '443','445','3306','8080','8443','5432']
 
     headers =  {
@@ -23,11 +23,11 @@ def scanner():
         'Accept-Encoding': '',
         'Cookie': cookie
     }
-    url = 'https://developers.facebook.com/tools/debug/echo/?q=' + target + ':' + port + '/'
+    url = 'https://developers.facebook.com/tools/debug/echo/?q=' + target + ':' 
     
     for port in ports:
         try:
-            response = requests.get(url, headers = headers, timeout = 5)
+            response = requests.get(url + port + '/', headers = headers, timeout = 5)
             if 'connect timed out after' in response.text:
                 print '\033[1;31m [+] Port %s is closed\033[1;m'%port
             elif '/html' in response.text:
@@ -42,5 +42,5 @@ def menu():
     cookie = raw_input("\n\033[97m [?] Enter facebook cookie: \033[1;m")
     if 'http://' not in target or 'https://' not in target:
        target = "http://" + target
-    scanner()
+    scanner(target, cookie)
 menu()
